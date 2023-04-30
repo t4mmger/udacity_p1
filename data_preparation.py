@@ -37,7 +37,6 @@ df[['WhiteElo','BlackElo','Pieces','PlyCount']] = df[['WhiteElo', 'BlackElo','Pi
 
 #formula for probability from https://fivethirtyeight.com/features/introducing-nfl-elo-ratings/
 df['Probability'] = 1 / (1+10**(-(df['WhiteElo'] - df['BlackElo'])/400))
-
 df['Result2'] = df.Result.apply(lambda val : 0.5 if val == '1-0' else (-0.5 if val == '0-1' else 0.0))
 
 #https://stackoverflow.com/questions/34962104/how-can-i-use-the-apply-function-for-a-single-column
@@ -69,7 +68,7 @@ def color_funk(w,b):
 def apply_cf(x):
     return color_funk(x['WhiteElo'], x['BlackElo'])
     
-df['Strong_Player_Result'] = df.apply(apply_rc, axis=1)
+df['Strong_Player_Result'] = df.apply(apply_rc, axis=1)+0.5
 df['Strong_Player_Prob'] = df.apply(apply_pc, axis=1)
 df['Strong_Player_White'] = df.apply(apply_cf, axis=1)
 df['Elo_Dif'] = abs(df.WhiteElo - df.BlackElo)

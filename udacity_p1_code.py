@@ -13,7 +13,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn import preprocessing
-
+from statsmodels.discrete.discrete_model import Probit
 endgame_threshold = 16
 
 #%% [markdown]
@@ -34,18 +34,26 @@ df = df
 #sns.barplot(data = df, x=df['Result'], y=df['WhiteElo'], color = 'Blue' )
 #plt.show()
 
-sns.countplot(data = df, x=df['Result'], palette=  ['Black', 'Grey'], order=['1-0', '1/2-1/2', '0-1'], hue = df.Strong_Player_White )
-plt.show()
+#sns.countplot(data = df, x=df['Result'], palette=  ['Black', 'Grey'], order=['1-0', '1/2-1/2', '0-1'], hue = df.Strong_Player_White )
+#plt.show()
 
-sns.countplot(data = df, x=df['PlyCount'], color = 'Blue')
-plt.show()
+#sns.histplot(data = df, x=df['PlyCount'], color = 'Blue')
+#plt.show()
 #sns.barplot(data = df, y=df.PlyCount.value_counts(), x=df['PlyCount'], color='Blue')
 #plt.show()
 
+#sns.barplot(data = df, x=df['Strong_Player_Result'], y=df['PlyCount'])
+#plt.show()
 
+#from https://stackoverflow.com/questions/36362624/how-to-plot-multiple-histograms-on-same-plot-with-seaborn
+sns.set_theme()  # <-- This actually changes the look of plots.
+plt.hist([df[df['Pieces'] <= endgame_threshold].PlyCount, df[df['Pieces'] > endgame_threshold].PlyCount], color=['r','b'], alpha=0.5)
+plt.show()
 #%%
 ##############
 #General statistics
+
+df.describe()
 
 #How many games do we have? 
 print("Number of games: ",  df.shape[0])
@@ -72,8 +80,6 @@ print('Weaker players: ', df[(df['BlackElo'] <= 2000) | (df['WhiteElo'] <= 2000)
 strong_weak = df[((df['BlackElo'] <= 2000) & (df['WhiteElo'] > 2000)) | ((df['BlackElo'] > 2000) & (df['WhiteElo'] <= 2000))]
 #print(strong_weak)
 
-sns.barplot(data = df, x=df['Strong_Player_Result'], y=df['PlyCount'])
-plt.show()
 
 ##############
 #How good is the performance of the stronger players vs. weaker players?
@@ -98,9 +104,9 @@ print('Number of endgames with strong vs weak players: ', count)
 print('Avg. Points for stronger players in endgame really: ', result)
 print('Avg. Points for stronger players in endgame expected: ', prob)
 
-
+#%%
 #regression
-#exec(open("C:\\Users\\TAMM\\Desktop\\udacity\\projekt1\\udacity_p1\\regression.py").read())
+exec(open("C:\\Users\\TAMM\\Desktop\\udacity\\projekt1\\udacity_p1\\regression.py").read())
 
 
 # %%

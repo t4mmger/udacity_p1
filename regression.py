@@ -11,7 +11,7 @@ min_max_scaler = preprocessing.MinMaxScaler()
 x1_scaled = min_max_scaler.fit_transform(x1)
 df['Elo_Dif2'] = pd.DataFrame(x1_scaled)
 
-X = df[['Elo_Dif2', 'Strong_Player_White']]
+X = df[['Elo_Dif', 'Strong_Player_White']]
 y = df['Strong_Player_Result']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = .30, random_state=42)
 
@@ -58,8 +58,15 @@ coef_df = coef_weights(lm_model.coef_, X_train)
 
 #From https://www.cluzters.ai/forums/topic/395/find-p-value-significance-in-scikit-learn-linear-regression?c=1597
 
-#X_train2 = sma.add_constant(X_train)
-est = sma.OLS(y_train, X_train)
+X_train2 = sma.add_constant(X_train)
+est = sma.OLS(y_train, X_train2)
 est2 = est.fit()
 print(est2.summary())
-#print(coef_df.head())
+print(coef_df.head())
+
+
+#Probit might be better than linear
+#from https://jbhender.github.io/Stats506/F18/GP/Group14.html#python
+model = Probit(y_train, X_train2)
+probit_model = model.fit()
+print(probit_model.summary())
