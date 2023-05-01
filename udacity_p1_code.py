@@ -20,6 +20,14 @@ endgame_threshold = 16
 elo_threshold = 2250
 
 
+#%% [markdown]
+
+### Introduction
+
+# What this analysis is about.
+# Some words on the dataset. 
+
+
 #%% 
 #Data Preparation
 
@@ -28,14 +36,13 @@ elo_threshold = 2250
 
 df = pd.read_csv(filepath_or_buffer = "C:\\Users\\TAMM\\Desktop\\udacity\\projekt1\\udacity_p1\\game_result_list.csv", sep = ';')
 
-
 #%% 
 
 sns.countplot(data = df, x=df['Result'], palette = ['Black', 'Grey'], order=['1-0', '1/2-1/2', '0-1'], hue = df.Strong_Player_White )
 plt.show()
 
-sns.countplot(data = df, x=df['Strong_Player_Result'], order=['1-0', '1/2-1/2', '0-1'], hue = df.Strong_Player_White )
-plt.show()
+#sns.countplot(data = df, x=df['Strong_Player_Result'], hue = df.Strong_Player_White )
+#plt.show()
 
 sns.kdeplot(data=df, x=df['PlyCount'], legend = False, hue= df['Pieces'] <= endgame_threshold, shade=True)
 plt.title('How many moves were played and was an endgame reached?')
@@ -63,7 +70,6 @@ print("Average Number of half-moves %3.2f" %  (move_cnt))
 #How well was the outcome predicted on average?
 print('We expected %3.2f points for white and got %3.2f' % (df.Probability.mean(), df.Result2.mean()+0.5) )
 
-
 #Do stronger players play more moves on average?
 print('Average number of moves for')
 print('Stronger players: ', df[(df['BlackElo'] > elo_threshold) | (df['WhiteElo'] > elo_threshold)].PlyCount.mean())
@@ -72,8 +78,6 @@ print('Weaker players: ', df[(df['BlackElo'] <= elo_threshold) | (df['WhiteElo']
 
 #Create dataset strong players vs weak players
 strong_weak = df[((df['BlackElo'] <= elo_threshold) & (df['WhiteElo'] > elo_threshold)) | ((df['BlackElo'] > elo_threshold) & (df['WhiteElo'] <= elo_threshold))]
-#print(strong_weak)
-
 
 ##############
 #How good is the performance of the stronger players vs. weaker players?
@@ -111,5 +115,6 @@ exec(open("C:\\Users\\TAMM\\Desktop\\udacity\\projekt1\\udacity_p1\\regression.p
 ## How can we improve things?
 #  We only did an OLS regression, but the win probability based on Elo difference follows a normal or logit distribution, so a logit or probit regression would be better.
 
+# What do you think is most important for improving your chess?
 
 # %%
