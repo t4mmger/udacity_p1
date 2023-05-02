@@ -23,11 +23,18 @@ elo_threshold = 2250
 
 #%% [markdown]
 
-### Introduction
+### Business Understanding
 
-# What this analysis is about.
+#I analysed a dataset of chess games to answer these three questiosn:
+#
+#Are there differences in play between weak and strong players?
+#
+#Are game statistics different when strong players play against weaker players? 
+#
+# #Is the color White still a factor?
+#
 
-## Dataset
+## Dataset Understanding
 # I use a pgn file with roughly 140k games from players rated between 2000 and 2500 and the years 1980-1989. I chose this period because I wanted to have over the board games with longer time control. 
 #
 # The rating is not always Elo and sometimes the import does not work. I handle the first by dropping non elo games and the second by working with try and except.
@@ -44,6 +51,8 @@ elo_threshold = 2250
 df = pd.read_csv(filepath_or_buffer = "C:\\Users\\TAMM\\Desktop\\udacity\\projekt1\\udacity_p1\\game_result_list.csv", sep = ';')
 
 #%%
+
+### Data Understanding with graphics
 
 sns.countplot(data = df, x=df['Result'], palette = ['Black', 'Grey'], order=['1-0', '1/2-1/2', '0-1'], hue = df.Strong_Player_White )
 plt.show()
@@ -77,8 +86,8 @@ plt.show()
 
 
 #%% [markdown]
-##############
-### General statistics
+
+### Data Understanding with numbers (1)
 
 print(df.describe())
 
@@ -90,13 +99,16 @@ print(df.describe())
 # The probability of White scoring is 0.505, because White's Elo a little bit higher.\
 # The actual result was even better with 0.555 (We have to add 0.5 to Result2), indicating that the White pieces have an advantage.
 
-#%%
+#%%[markdown]
 
-############## ENDGAME
+### Data Understanding with numbers (2)
 
 #How often does an endgame arise?
 endgame_cnt = df[df['Pieces']<=endgame_threshold].Pieces.count()
 print("Share of endgames %3.2f" %  (endgame_cnt/df.shape[0]))
+
+
+### Are there differences in play between weak and strong players?
 
 #Do stronger players play reach endgames more often on average?
 endgame_cnt1 = df[((df['Pieces']<=endgame_threshold) & ((df['BlackElo'] > elo_threshold) | (df['WhiteElo'] > elo_threshold)))].Pieces.count()
@@ -111,9 +123,13 @@ print("How often do weaker players reach an endgame? %3.2f" %  (endgame_cnt2/df[
 #%%
 ############## MOVES
 
+### Data Understanding with numbers (3)
+
 #How many half-moves are played on average?
 move_cnt = df.PlyCount.mean()
 print("Average Number of half-moves %3.2f" %  (move_cnt))
+
+### Are there differences in play between weak and strong players?
 
 #Do stronger players play more moves on average?
 print('Average number of half-moves for')
@@ -122,7 +138,6 @@ print('Weaker players: ', df[(df['BlackElo'] <= elo_threshold) | (df['WhiteElo']
 
 #%% [markdown]
 #We do neither notice any difference on moves between stronger and weaker players. 
-
 
 #%% [markdown]
 ### Are game statistics different when strong players play against weaker players? 
