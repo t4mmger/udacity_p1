@@ -103,14 +103,16 @@ print(df.describe())
 
 ### Data Understanding with numbers (2)
 
+
+#%%
 #How often does an endgame arise?
+
 endgame_cnt = df[df['Pieces']<=endgame_threshold].Pieces.count()
 print("Share of endgames %3.2f" %  (endgame_cnt/df.shape[0]))
 
-
 ### Are there differences in play between weak and strong players?
 
-#Do stronger players play reach endgames more often on average?
+#Do stronger players reach endgames more often on average?
 endgame_cnt1 = df[((df['Pieces']<=endgame_threshold) & ((df['BlackElo'] > elo_threshold) | (df['WhiteElo'] > elo_threshold)))].Pieces.count()
 print("How often do stronger players reach an endgame? %3.2f" %  (endgame_cnt1/df[((df['BlackElo'] > elo_threshold) | (df['WhiteElo'] > elo_threshold))].shape[0]))
 
@@ -183,7 +185,8 @@ print('Avg. Points for stronger players in endgame expected: %5.4f' % prob)
 # We will answer this question with a OLS regression. The y variable will be the result from the stronger player's view.
 #
 # Our X-variables will be the Elo Difference and a White-Dummy.
-#
+
+#%%
 #How well was the outcome predicted by Elo on average?
 print('Based on Elo Probability we expected %3.2f points for white and got %3.2f' % (df.Probability.mean(), df.Result2.mean()+0.5) )
 
@@ -205,7 +208,7 @@ y_train_preds = lm_model.predict(X_train)
 
 test_score = r2_score(y_test, y_test_preds)
 train_score = r2_score(y_train, y_train_preds)
-print('R^2 Score is on our test sample is: %5.4f' % (test_score))
+print('R^2 Score on our test sample is: %5.4f' % (test_score))
 print('In Training we had: %5.4f' % (train_score))
 
 #print('Mean predictions and real mean on traing set:  %5.4f vs %5.4f' %  (y_train_preds.mean(), y_train.mean()))
